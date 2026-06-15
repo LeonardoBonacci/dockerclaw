@@ -229,3 +229,11 @@ swarm/*/data/devices/
 swarm/*/data/memory/
 swarm/*/data/plugin-skills/
 swarm/*/data/workspace-attestations/
+
+# Runtime mailbox messages
+swarm/shared/mailbox/**/msg-*.md
+swarm/shared/mailbox/**/task-*.md
+swarm/shared/mailbox/**/response-*.md
+swarm/shared/mailbox/**/bulletin-*.md
+swarm/shared/mailbox/**/bulletin-*.md.tmp
+swarm/shared/mailbox/-t/**
