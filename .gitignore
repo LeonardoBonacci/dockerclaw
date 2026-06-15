@@ -229,6 +229,18 @@ data/memory/
 data/plugin-skills/
 data/workspace-attestations/
 
+# Swarm OpenClaw runtime data (keep only openclaw.json config per agent)
+swarm/*/data/agents/
+swarm/*/data/identity/
+swarm/*/data/logs/
+swarm/*/data/state/
+swarm/*/data/update-check.json
+swarm/*/data/*.last-good
+swarm/*/data/devices/
+swarm/*/data/memory/
+swarm/*/data/plugin-skills/
+swarm/*/data/workspace-attestations/
+
 # OpenClaw workspace runtime
 workspace/.openclaw/
 workspace/AGENTS.md
