@@ -1,0 +1,52 @@
+{
+  "generatedBy": "openclaw-plugin-model-catalog-v1",
+  "providers": {
+    "ollama": {
+      "baseUrl": "http://host.docker.internal:11434",
+      "models": [
+        {
+          "id": "nomic-embed-text:latest",
+          "name": "nomic-embed-text:latest",
+          "reasoning": false,
+          "input": [
+            "text"
+          ],
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0
+          },
+          "contextWindow": 8192,
+          "maxTokens": 8192,
+          "compat": {
+            "supportsTools": false,
+            "supportsUsageInStreaming": true
+          }
+        },
+        {
+          "id": "llama3.1:latest",
+          "name": "llama3.1:latest",
+          "reasoning": false,
+          "input": [
+            "text"
+          ],
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0
+          },
+          "contextWindow": 131072,
+          "maxTokens": 8192,
+          "compat": {
+            "supportsTools": true,
+            "supportsUsageInStreaming": true
+          }
+        }
+      ],
+      "apiKey": "ollama-local",
+      "api": "ollama"
+    }
+  }
+}

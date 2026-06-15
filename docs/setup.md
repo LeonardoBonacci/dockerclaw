@@ -16,7 +16,7 @@ ollama pull llama3.1:latest
 curl http://localhost:11434/api/tags
 ```
 
-## Starting the Stack
+## Starting the Single Agent
 
 ```bash
 cd dockerclaw
@@ -29,26 +29,51 @@ This starts the OpenClaw container which:
 - Mounts `./workspace` so the agent can execute scripts
 - Mounts `./data` for persistent configuration
 
+## Starting the Multi-Agent Swarm
+
+```bash
+cd dockerclaw/swarm
+docker compose up -d
+```
+
+This launches 4 OpenClaw containers (coordinator, writer, critic, researcher) that:
+- Share a filesystem at `swarm/shared/` for mailbox-based communication
+- Each expose their own port (18800–18803)
+- All connect to the same host Ollama instance
+
+### Seeding Tasks
+
+```bash
+python3 shared/scripts/kickoff.py
+```
+
+This writes initial task files into each agent's inbox.
+
+### Triggering Agents
+
+```bash
+docker exec swarm-researcher node openclaw.mjs agent --agent researcher --message "Check your inbox and process the task"
+docker exec swarm-writer node openclaw.mjs agent --agent writer --message "Check your inbox and process the task"
+docker exec swarm-critic node openclaw.mjs agent --agent critic --message "Check your inbox and process the task"
+```
+
 ## First-Time Setup
 
-The repo ships with a pre-configured `data/openclaw.json`. No onboarding needed — just `docker compose up -d`.
+The repo ships with pre-configured `data/openclaw.json` and `swarm/*/data/openclaw.json` files. No onboarding needed — just `docker compose up -d`.
 
 Gateway password: `openclaw`
 
 ## Verifying It Works
 
-1. Open http://localhost:18789
+1. Open http://localhost:18789 (single agent) or http://localhost:18800 (swarm coordinator)
 2. Log in with password `openclaw`
-3. Type any message (e.g., "Tell me a joke about Docker")
-4. The agent should:
-   - Generate a joke using Llama 3.1
-   - Execute `joke_printer.py` to print it
-   - Return the output in the chat
+3. Send a message — the agent will respond using Llama 3.1
 
 ## Stopping
 
 ```bash
-docker compose down
+docker compose down          # single agent
+cd swarm && docker compose down   # swarm
 ```
 
 ## Troubleshooting
@@ -57,5 +82,6 @@ docker compose down
 |---------|-----|
 | Can't connect to Ollama | Ensure `ollama serve` is running on the host |
 | Model not found | Run `ollama pull llama3.1:latest` |
-| Port 18789 in use | Change the port mapping in `docker-compose.yml` |
+| Port in use | Change the port mapping in the relevant `docker-compose.yml` |
+| Agent not responding | Llama 3.1 on CPU can take 30s+ per response — be patient |
 | Script not executing | Check that `workspace/joke_printer.py` exists and the agent has code execution enabled |

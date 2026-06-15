@@ -1,42 +1,52 @@
-# Tool Use — Python Script Execution
+# Tools — Agent Capabilities
 
-OpenClaw supports native code execution as an agent tool. When `code_execution` is enabled in the agent's tools list, the agent can run scripts in the mounted `workspace/` directory.
+OpenClaw agents have access to code execution tools when configured with `"profile": "coding"`. This lets them run shell commands and Python scripts inside their container.
 
 ## How It Works
 
-1. User sends a message via WebChat (e.g., "Tell me a joke about cats")
-2. The agent (Llama 3.1) generates a joke
-3. The agent uses its code execution tool to run `joke_printer.py` with the joke
-4. The script output is returned in the chat
+1. User sends a message (via WebChat or CLI)
+2. The agent (Llama 3.1) processes the request
+3. The agent uses its code execution tool to run commands
+4. Output is returned in the chat or written to files
 
 This uses OpenClaw's native code execution capability — no MCP server needed.
 
-## The Joke Printer Script
+## CLI Agent Invocation
 
-Located at `workspace/joke_printer.py`, this script:
-- Accepts a joke (or topic) as a command-line argument
-- Prints it with formatting
-- Returns the output to the agent
+You can trigger an agent headlessly from outside the container:
 
-## Adding More Scripts
+```bash
+docker exec <container> node openclaw.mjs agent --agent <agent-id> --message "your instruction"
+```
 
-Place any `.py` file in the `workspace/` directory. The agent can execute it if instructed via the system prompt or user message. The workspace is mounted at `/home/node/workspace` inside the container.
+This is particularly useful for:
+- Automation scripts that orchestrate multiple agents
+- Seeding tasks into agent inboxes
+- Triggering agents in a swarm without opening the web UI
+
+## Multi-Agent Communication
+
+In the swarm setup, agents communicate via a shared filesystem:
+
+```
+swarm/shared/
+├── mailbox/
+│   ├── coordinator/inbox/   # Coordinator receives compiled responses
+│   ├── writer/inbox/        # Writer receives creative tasks
+│   ├── critic/inbox/        # Critic receives review tasks
+│   ├── researcher/inbox/    # Researcher receives research tasks
+│   └── board/               # Shared bulletin board for all agents
+└── scripts/
+    ├── kickoff.py           # Seeds initial tasks
+    └── send_message.py      # Utility for inter-agent messaging
+```
+
+Agents read `.md` files from their inbox, process them, and write responses to the coordinator's inbox or the shared board.
 
 ## Security Note
 
-Code execution runs inside the container with access only to the mounted workspace volume. It cannot access the host filesystem beyond `./workspace` and `./data`.
+Code execution runs inside the container with access only to the mounted workspace volume. It cannot access the host filesystem beyond the explicitly mounted paths.
 
-## Standalone Script: trump_jokes.py
+## Adding Custom Scripts
 
-For headless/terminal use without the OpenClaw UI:
-
-```bash
-python3 workspace/trump_jokes.py
-```
-
-This script:
-- Calls your local Ollama directly (no OpenClaw container needed)
-- Generates a Donald Trump joke via Llama 3.1
-- Pipes the result through `joke_printer.py` for formatted output
-
-Requires only Ollama running locally on port 11434.
+Place any `.py` or `.sh` file in the workspace directory. The agent can execute it if instructed via the system prompt (`OPENCLAW.md`) or user message.

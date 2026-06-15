@@ -1,8 +1,10 @@
 # DockerClaw
 
-A minimal Docker setup for [OpenClaw](https://github.com/openclaw/openclaw) that connects to your **local host Ollama** instance, provides a WebChat interface, and uses a joke-generating agent that executes a Python script to print jokes.
+A Docker setup for [OpenClaw](https://github.com/openclaw/openclaw) that connects to your **local Ollama** instance. Includes a single-agent container and a **multi-agent swarm** demonstrating inter-agent communication via a shared filesystem.
 
 ## Architecture
+
+### Single Agent (default)
 
 ```
 Browser (localhost:18789)
@@ -12,10 +14,25 @@ Browser (localhost:18789)
 │  OpenClaw    │────────▶│  Ollama (host)   │
 │  (container) │  :11434 │  llama3.1:latest │
 └──────────────┘         └──────────────────┘
-    │
-    ▼
-workspace/joke_printer.py  (executed by the agent)
 ```
+
+### Multi-Agent Swarm
+
+```
+┌─────────────────────────────────────────────────────┐
+│                  Shared Volume                        │
+│         swarm/shared/mailbox/{agent}/inbox/           │
+└────┬──────────┬──────────┬──────────┬───────────────┘
+     │          │          │          │
+┌────▼────┐ ┌──▼────┐ ┌───▼───┐ ┌───▼──────┐
+│Coordin- │ │Writer │ │Critic │ │Researcher│
+│ator     │ │:18801 │ │:18802 │ │:18803    │
+│:18800   │ └───────┘ └───────┘ └──────────┘
+└─────────┘
+     All containers → Ollama (host:11434)
+```
+
+Four agents collaborate on a topic (e.g., World Cup 2026) by reading tasks from their inboxes, producing work, and posting results to the shared board.
 
 ## Prerequisites
 
@@ -27,26 +44,33 @@ workspace/joke_printer.py  (executed by the agent)
 
 ## Quick Start
 
+### Single agent
+
 ```bash
 docker compose up -d
 open http://localhost:18789
 ```
 
-Login with password: `openclaw`
-
-Chat with the agent — it will generate a joke about your topic and run the Python script to print it.
-
-### Standalone Script (no UI)
-
-Request a Donald Trump joke directly from the terminal:
+### Multi-agent swarm
 
 ```bash
-python3 workspace/trump_jokes.py
+cd swarm
+docker compose up -d
+python3 shared/scripts/kickoff.py   # seed tasks to all agents
 ```
 
-This calls Ollama directly and prints the joke — no OpenClaw UI required.
+Then trigger agents via CLI:
+```bash
+docker exec swarm-researcher node openclaw.mjs agent --agent researcher --message "Check your inbox and process the task"
+```
+
+Login password for all agents: `openclaw`
 
 ## Documentation
+
+- [Setup Guide](docs/setup.md) — Detailed setup and onboarding
+- [Configuration](docs/configuration.md) — Config file reference
+- [Tools](docs/tools.md) — Agent capabilities and code execution
 
 - [Setup Guide](docs/setup.md) — Detailed setup and onboarding
 - [Configuration](docs/configuration.md) — Config file reference
@@ -54,9 +78,13 @@ This calls Ollama directly and prints the joke — no OpenClaw UI required.
 
 ## Ports
 
-| Port  | Service                          |
-|-------|----------------------------------|
-| 18789 | Dashboard + WebChat (all-in-one) |
+| Port  | Service                              |
+|-------|--------------------------------------|
+| 18789 | Main agent — Dashboard + WebChat     |
+| 18800 | Swarm Coordinator (El Capitán)       |
+| 18801 | Swarm Writer (The Poet of the Pitch) |
+| 18802 | Swarm Critic (VAR)                   |
+| 18803 | Swarm Researcher (The Scout)         |
 
 ## License
 

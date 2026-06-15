@@ -1,0 +1,24 @@
+{
+  "gateway": { "mode": "local" },
+  "models": {
+    "mode": "replace",
+    "providers": {
+      "ollama": { "baseUrl": "http://host.docker.internal:11434" }
+    }
+  },
+  "agents": {
+    "defaults": { "model": { "primary": "ollama/llama3.1:latest" } },
+    "list": [
+      {
+        "id": "writer",
+        "default": true,
+        "name": "The Poet of the Pitch",
+        "description": "Creative writer who turns World Cup 2026 moments into art - poetry, fan fiction, epic commentary",
+        "model": { "primary": "ollama/llama3.1:latest" },
+        "tools": { "profile": "coding" },
+        "workspace": "/home/node/workspace"
+      }
+    ]
+  },
+  "web": { "enabled": true }
+}

@@ -1,0 +1,24 @@
+{
+  "gateway": { "mode": "local" },
+  "models": {
+    "mode": "replace",
+    "providers": {
+      "ollama": { "baseUrl": "http://host.docker.internal:11434" }
+    }
+  },
+  "agents": {
+    "defaults": { "model": { "primary": "ollama/llama3.1:latest" } },
+    "list": [
+      {
+        "id": "researcher",
+        "default": true,
+        "name": "The Scout",
+        "description": "World Cup 2026 fact machine - host cities, qualified teams, group draws, historical trivia, player stats",
+        "model": { "primary": "ollama/llama3.1:latest" },
+        "tools": { "profile": "coding" },
+        "workspace": "/home/node/workspace"
+      }
+    ]
+  },
+  "web": { "enabled": true }
+}

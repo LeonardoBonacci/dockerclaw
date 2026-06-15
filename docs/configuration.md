@@ -2,7 +2,7 @@
 
 OpenClaw configuration lives in `data/openclaw.json` (mounted into the container at `/home/node/.openclaw/openclaw.json`).
 
-## Config File Reference
+## Single Agent Config
 
 ```json
 {
@@ -28,7 +28,7 @@ OpenClaw configuration lives in `data/openclaw.json` (mounted into the container
         "id": "joker",
         "default": true,
         "name": "Joke Bot",
-        "description": "Generates jokes and prints them via joke_printer.py",
+        "description": "Default agent with code execution",
         "model": {
           "primary": "ollama/llama3.1:latest"
         },
@@ -44,6 +44,35 @@ OpenClaw configuration lives in `data/openclaw.json` (mounted into the container
   }
 }
 ```
+
+## Swarm Agent Config
+
+Each swarm agent (`swarm/{role}/data/openclaw.json`) follows the same structure but with a unique `id` and `name`:
+
+```json
+{
+  "agents": {
+    "list": [
+      {
+        "id": "researcher",
+        "name": "The Scout",
+        "description": "Researches topics and reports findings",
+        "tools": { "profile": "coding" },
+        "thinking": { "level": "off" }
+      }
+    ]
+  }
+}
+```
+
+### Swarm Roles
+
+| Agent ID | Name | Role |
+|----------|------|------|
+| `coordinator` | El Capitán | Assigns tasks, compiles results |
+| `writer` | The Poet of the Pitch | Creative content generation |
+| `critic` | VAR (Video Assistant Reviewer) | Quality assessment and review |
+| `researcher` | The Scout | Fact-finding and research |
 
 ## Key Settings
 

@@ -1,0 +1,72 @@
+services:
+  coordinator:
+    image: ghcr.io/openclaw/openclaw:latest
+    container_name: swarm-coordinator
+    restart: unless-stopped
+    ports:
+      - "18800:18789"
+    volumes:
+      - ./coordinator/data:/home/node/.openclaw
+      - ./coordinator/workspace:/home/node/workspace
+      - ./shared:/home/node/workspace/shared
+    environment:
+      - OLLAMA_BASE_URL=http://host.docker.internal:11434
+      - OPENCLAW_GATEWAY_MODE=local
+      - OPENCLAW_GATEWAY_PASSWORD=openclaw
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    command: ["node", "openclaw.mjs", "gateway", "--allow-unconfigured"]
+
+  writer:
+    image: ghcr.io/openclaw/openclaw:latest
+    container_name: swarm-writer
+    restart: unless-stopped
+    ports:
+      - "18801:18789"
+    volumes:
+      - ./writer/data:/home/node/.openclaw
+      - ./writer/workspace:/home/node/workspace
+      - ./shared:/home/node/workspace/shared
+    environment:
+      - OLLAMA_BASE_URL=http://host.docker.internal:11434
+      - OPENCLAW_GATEWAY_MODE=local
+      - OPENCLAW_GATEWAY_PASSWORD=openclaw
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    command: ["node", "openclaw.mjs", "gateway", "--allow-unconfigured"]
+
+  critic:
+    image: ghcr.io/openclaw/openclaw:latest
+    container_name: swarm-critic
+    restart: unless-stopped
+    ports:
+      - "18802:18789"
+    volumes:
+      - ./critic/data:/home/node/.openclaw
+      - ./critic/workspace:/home/node/workspace
+      - ./shared:/home/node/workspace/shared
+    environment:
+      - OLLAMA_BASE_URL=http://host.docker.internal:11434
+      - OPENCLAW_GATEWAY_MODE=local
+      - OPENCLAW_GATEWAY_PASSWORD=openclaw
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    command: ["node", "openclaw.mjs", "gateway", "--allow-unconfigured"]
+
+  researcher:
+    image: ghcr.io/openclaw/openclaw:latest
+    container_name: swarm-researcher
+    restart: unless-stopped
+    ports:
+      - "18803:18789"
+    volumes:
+      - ./researcher/data:/home/node/.openclaw
+      - ./researcher/workspace:/home/node/workspace
+      - ./shared:/home/node/workspace/shared
+    environment:
+      - OLLAMA_BASE_URL=http://host.docker.internal:11434
+      - OPENCLAW_GATEWAY_MODE=local
+      - OPENCLAW_GATEWAY_PASSWORD=openclaw
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    command: ["node", "openclaw.mjs", "gateway", "--allow-unconfigured"]

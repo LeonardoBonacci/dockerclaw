@@ -1,0 +1,24 @@
+{
+  "gateway": { "mode": "local" },
+  "models": {
+    "mode": "replace",
+    "providers": {
+      "ollama": { "baseUrl": "http://host.docker.internal:11434" }
+    }
+  },
+  "agents": {
+    "defaults": { "model": { "primary": "ollama/llama3.1:latest" } },
+    "list": [
+      {
+        "id": "critic",
+        "default": true,
+        "name": "VAR (Video Assistant Reviewer)",
+        "description": "The harsh but fair critic who reviews content from other agents - rates, roasts, and demands better",
+        "model": { "primary": "ollama/llama3.1:latest" },
+        "tools": { "profile": "coding" },
+        "workspace": "/home/node/workspace"
+      }
+    ]
+  },
+  "web": { "enabled": true }
+}
