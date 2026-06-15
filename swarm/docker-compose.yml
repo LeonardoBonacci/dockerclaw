@@ -70,3 +70,14 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
     command: ["node", "openclaw.mjs", "gateway", "--allow-unconfigured"]
+
+  dashboard:
+    build: ../demo
+    container_name: swarm-dashboard
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./shared/mailbox:/app/swarm/shared/mailbox
+    environment:
+      - MAILBOX_PATH=/app/swarm/shared/mailbox

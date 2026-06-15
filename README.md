@@ -2,6 +2,12 @@
 
 A multi-agent swarm built on [OpenClaw](https://github.com/openclaw/openclaw) that connects to your **local Ollama** instance. Four agents collaborate via a shared filesystem mailbox.
 
+## Demo
+
+<video src="demo/recordings/dockerclaw-demo.mp4" width="100%" autoplay loop muted playsinline></video>
+
+> Four agents (Coordinator, Researcher, Writer, Critic) collaborating on a World Cup 2026 match preview — each thinking via Ollama's llama3.1, communicating through a shared mailbox.
+
 ## Architecture
 
 ```
@@ -43,6 +49,32 @@ docker exec swarm-researcher node openclaw.mjs agent --agent researcher --messag
 
 Login password for all agents: `openclaw`
 
+## Live Dashboard
+
+A real-time message dashboard shows inter-agent communication as it happens:
+
+```bash
+# Included in docker compose (port 8080):
+open http://localhost:8080
+
+# Or run standalone:
+pip install -r demo/requirements.txt
+python demo/dashboard.py
+```
+
+## Recording a Demo Video
+
+Record a video of the swarm in action using Playwright:
+
+```bash
+cd demo
+pip install -r requirements.txt
+playwright install chromium
+python record_demo.py
+```
+
+Output: `demo/recordings/dockerclaw-demo.webm`
+
 ## Documentation
 
 - [Setup Guide](docs/setup.md) — Detailed setup and onboarding
@@ -53,6 +85,7 @@ Login password for all agents: `openclaw`
 
 | Port  | Service                              |
 |-------|--------------------------------------|
+| 8080  | Live Dashboard (message feed)        |
 | 18800 | Swarm Coordinator (El Capitán)       |
 | 18801 | Swarm Writer (The Poet of the Pitch) |
 | 18802 | Swarm Critic (VAR)                   |
