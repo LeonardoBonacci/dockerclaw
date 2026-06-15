@@ -22,11 +22,11 @@ docker exec <container> node openclaw.mjs agent --agent <agent-id> --message "yo
 This is particularly useful for:
 - Automation scripts that orchestrate multiple agents
 - Seeding tasks into agent inboxes
-- Triggering agents in a swarm without opening the web UI
+- Triggering agents in the swarm without opening the web UI
 
 ## Multi-Agent Communication
 
-In the swarm setup, agents communicate via a shared filesystem:
+Agents communicate via a shared filesystem:
 
 ```
 swarm/shared/
@@ -45,8 +45,4 @@ Agents read `.md` files from their inbox, process them, and write responses to t
 
 ## Security Note
 
-Code execution runs inside the container with access only to the mounted workspace volume. It cannot access the host filesystem beyond the explicitly mounted paths.
-
-## Adding Custom Scripts
-
-Place any `.py` or `.sh` file in the workspace directory. The agent can execute it if instructed via the system prompt (`OPENCLAW.md`) or user message.
+Code execution runs inside the container with access only to the mounted workspace and shared volumes. It cannot access the host filesystem beyond the explicitly mounted paths.

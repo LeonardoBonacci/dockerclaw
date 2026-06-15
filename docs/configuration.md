@@ -1,8 +1,8 @@
 # Configuration
 
-OpenClaw configuration lives in `data/openclaw.json` (mounted into the container at `/home/node/.openclaw/openclaw.json`).
+Each swarm agent has its own config at `swarm/{role}/data/openclaw.json` (mounted into the container at `/home/node/.openclaw/openclaw.json`).
 
-## Single Agent Config
+## Agent Config
 
 ```json
 {
@@ -25,35 +25,6 @@ OpenClaw configuration lives in `data/openclaw.json` (mounted into the container
     },
     "list": [
       {
-        "id": "joker",
-        "default": true,
-        "name": "Joke Bot",
-        "description": "Default agent with code execution",
-        "model": {
-          "primary": "ollama/llama3.1:latest"
-        },
-        "tools": {
-          "profile": "coding"
-        },
-        "workspace": "/home/node/workspace"
-      }
-    ]
-  },
-  "web": {
-    "enabled": true
-  }
-}
-```
-
-## Swarm Agent Config
-
-Each swarm agent (`swarm/{role}/data/openclaw.json`) follows the same structure but with a unique `id` and `name`:
-
-```json
-{
-  "agents": {
-    "list": [
-      {
         "id": "researcher",
         "name": "The Scout",
         "description": "Researches topics and reports findings",
@@ -65,7 +36,7 @@ Each swarm agent (`swarm/{role}/data/openclaw.json`) follows the same structure 
 }
 ```
 
-### Swarm Roles
+## Swarm Roles
 
 | Agent ID | Name | Role |
 |----------|------|------|
@@ -111,8 +82,6 @@ Each swarm agent (`swarm/{role}/data/openclaw.json`) follows the same structure 
 |-----------|--------------------------------|
 | `enabled` | Enables the WebChat interface  |
 
-## Customizing the Agent Prompt
+## Customizing Agent Prompts
 
-The agent's system prompt is defined in `workspace/OPENCLAW.md`. Edit that file to change the agent's behavior. The current prompt instructs it to:
-1. Generate a joke based on user input
-2. Execute `joke_printer.py` to print the joke via code execution
+Each agent's system prompt is defined in its `workspace/OPENCLAW.md`. Edit that file to change the agent's behavior and role instructions.

@@ -217,18 +217,7 @@ __marimo__/
 # Streamlit
 .streamlit/secrets.toml
 
-# OpenClaw runtime data (keep only openclaw.json config)
-data/agents/
-data/identity/
-data/logs/
-data/state/
-data/update-check.json
-data/*.last-good
-data/devices/
-data/memory/
-data/plugin-skills/
-data/workspace-attestations/
-
+# OpenClaw runtime data
 # Swarm OpenClaw runtime data (keep only openclaw.json config per agent)
 swarm/*/data/agents/
 swarm/*/data/identity/
@@ -240,13 +229,3 @@ swarm/*/data/devices/
 swarm/*/data/memory/
 swarm/*/data/plugin-skills/
 swarm/*/data/workspace-attestations/
-
-# OpenClaw workspace runtime
-workspace/.openclaw/
-workspace/AGENTS.md
-workspace/BOOTSTRAP.md
-workspace/HEARTBEAT.md
-workspace/IDENTITY.md
-workspace/SOUL.md
-workspace/TOOLS.md
-workspace/USER.md

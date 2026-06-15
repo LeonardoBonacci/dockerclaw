@@ -16,23 +16,10 @@ ollama pull llama3.1:latest
 curl http://localhost:11434/api/tags
 ```
 
-## Starting the Single Agent
+## Starting the Swarm
 
 ```bash
-cd dockerclaw
-docker compose up -d
-```
-
-This starts the OpenClaw container which:
-- Connects to your host Ollama via `host.docker.internal:11434`
-- Exposes Dashboard + WebChat on port 18789
-- Mounts `./workspace` so the agent can execute scripts
-- Mounts `./data` for persistent configuration
-
-## Starting the Multi-Agent Swarm
-
-```bash
-cd dockerclaw/swarm
+cd swarm
 docker compose up -d
 ```
 
@@ -59,13 +46,13 @@ docker exec swarm-critic node openclaw.mjs agent --agent critic --message "Check
 
 ## First-Time Setup
 
-The repo ships with pre-configured `data/openclaw.json` and `swarm/*/data/openclaw.json` files. No onboarding needed — just `docker compose up -d`.
+The repo ships with pre-configured `swarm/*/data/openclaw.json` files. No onboarding needed — just `docker compose up -d`.
 
 Gateway password: `openclaw`
 
 ## Verifying It Works
 
-1. Open http://localhost:18789 (single agent) or http://localhost:18800 (swarm coordinator)
+1. Open http://localhost:18800 (coordinator)
 2. Log in with password `openclaw`
 3. Send a message — the agent will respond using Llama 3.1
 

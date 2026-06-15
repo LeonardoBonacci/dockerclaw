@@ -1,22 +1,8 @@
 # DockerClaw
 
-A Docker setup for [OpenClaw](https://github.com/openclaw/openclaw) that connects to your **local Ollama** instance. Includes a single-agent container and a **multi-agent swarm** demonstrating inter-agent communication via a shared filesystem.
+A multi-agent swarm built on [OpenClaw](https://github.com/openclaw/openclaw) that connects to your **local Ollama** instance. Four agents collaborate via a shared filesystem mailbox.
 
 ## Architecture
-
-### Single Agent (default)
-
-```
-Browser (localhost:18789)
-    │
-    ▼
-┌──────────────┐         ┌──────────────────┐
-│  OpenClaw    │────────▶│  Ollama (host)   │
-│  (container) │  :11434 │  llama3.1:latest │
-└──────────────┘         └──────────────────┘
-```
-
-### Multi-Agent Swarm
 
 ```
 ┌─────────────────────────────────────────────────────┐
@@ -44,15 +30,6 @@ Four agents collaborate on a topic (e.g., World Cup 2026) by reading tasks from 
 
 ## Quick Start
 
-### Single agent
-
-```bash
-docker compose up -d
-open http://localhost:18789
-```
-
-### Multi-agent swarm
-
 ```bash
 cd swarm
 docker compose up -d
@@ -72,15 +49,10 @@ Login password for all agents: `openclaw`
 - [Configuration](docs/configuration.md) — Config file reference
 - [Tools](docs/tools.md) — Agent capabilities and code execution
 
-- [Setup Guide](docs/setup.md) — Detailed setup and onboarding
-- [Configuration](docs/configuration.md) — Config file reference
-- [Tool Use](docs/tools.md) — How the Python script execution works
-
 ## Ports
 
 | Port  | Service                              |
 |-------|--------------------------------------|
-| 18789 | Main agent — Dashboard + WebChat     |
 | 18800 | Swarm Coordinator (El Capitán)       |
 | 18801 | Swarm Writer (The Poet of the Pitch) |
 | 18802 | Swarm Critic (VAR)                   |
