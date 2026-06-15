@@ -4,7 +4,7 @@ A multi-agent swarm built on [OpenClaw](https://github.com/openclaw/openclaw) th
 
 ## Demo
 
-<video src="demo/recordings/dockerclaw-demo.mp4" width="100%" autoplay loop muted playsinline></video>
+https://github.com/LeonardoBonacci/dockerclaw/raw/main/demo/recordings/dockerclaw-demo.mp4
 
 > Four agents (Coordinator, Researcher, Writer, Critic) collaborating on a World Cup 2026 match preview — each thinking via Ollama's llama3.1, communicating through a shared mailbox.
 
@@ -70,10 +70,10 @@ Record a video of the swarm in action using Playwright:
 cd demo
 pip install -r requirements.txt
 playwright install chromium
-python record_demo.py
+python record_demo_real.py
 ```
 
-Output: `demo/recordings/dockerclaw-demo.webm`
+Output: `demo/recordings/dockerclaw-demo.mp4`
 
 ## Documentation
 

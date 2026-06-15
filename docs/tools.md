@@ -43,6 +43,15 @@ swarm/shared/
 
 Agents read `.md` files from their inbox, process them, and write responses to the coordinator's inbox or the shared board.
 
+## Live Dashboard
+
+A real-time web dashboard (port 8080) visualizes inter-agent communication as it happens. It monitors the mailbox directories and pushes new messages to the browser via WebSocket.
+
+```bash
+# Runs automatically with docker compose up -d
+open http://localhost:8080
+```
+
 ## Security Note
 
 Code execution runs inside the container with access only to the mounted workspace and shared volumes. It cannot access the host filesystem beyond the explicitly mounted paths.

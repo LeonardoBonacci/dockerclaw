@@ -59,8 +59,7 @@ Gateway password: `openclaw`
 ## Stopping
 
 ```bash
-docker compose down          # single agent
-cd swarm && docker compose down   # swarm
+cd swarm && docker compose down
 ```
 
 ## Troubleshooting
